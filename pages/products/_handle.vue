@@ -35,28 +35,41 @@
 
 <script>
 export default {
-  data() {
+  data: function () {
     return {
       handle: this.$route.params.handle,
-      selectedOptions: {},
-      selectedVariant: '',
+      selectedOptions: [],
+      selectedVariant: ''
     }
   },
   methods: {
     optionSelect(e, optionName) {
-      this.selectedOptions[optionName] = e.target.value
+      const option = {
+        name: optionName,
+        value: e.target.value
+      }
+
+      if (this.selectedOptions.findIndex((f) => f.name === optionName) != -1) {
+        this.$set(
+          this.selectedOptions,
+          this.selectedOptions.findIndex((f) => f.name === optionName),
+          option
+        )
+      } else {
+        this.selectedOptions.push(option)
+      }
+
       this.calculateVariant(this.selectedOptions)
     },
     calculateVariant(options) {
       console.log('calculateVariant', options)
-      options.filter((option) => {})
-    },
+    }
   },
   async asyncData({ $shopify, params }) {
     const product = await $shopify.product.fetchByHandle(params.handle)
     const options = product.options
     const variants = product.variants
     return { product, options, variants }
-  },
+  }
 }
 </script>
