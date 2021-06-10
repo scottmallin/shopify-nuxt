@@ -60,9 +60,16 @@ export default {
       }
 
       this.calculateVariant(this.selectedOptions)
+      this.variantBySelectedOptions(this.selectedOptions)
     },
     calculateVariant(options) {
       console.log('calculateVariant', options)
+    },
+    async variantBySelectedOptions(options) {
+      console.log(this.$shopify)
+      // this.variant = await this.$shopify.product.variantBySelectedOptions(
+      //   options
+      // )
     }
   },
   async asyncData({ $shopify, params }) {

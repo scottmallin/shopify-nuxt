@@ -1,0 +1,33 @@
+query getAllProducts {
+  products(first: 3) {
+    edges {
+      node {
+        id
+        handle
+        title
+        images(first: 1) {
+          edges {
+            node {
+              id
+            }
+          }
+        }
+        options {
+          id
+          name
+          values
+        }
+        variants(first: 1) {
+          edges {
+            node {
+              id
+              image {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
