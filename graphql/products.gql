@@ -1,5 +1,5 @@
 query getAllProducts {
-  products(first: 3) {
+  products(first: 2) {
     edges {
       node {
         id
@@ -9,6 +9,7 @@ query getAllProducts {
           edges {
             node {
               id
+              originalSrc
             }
           }
         }
@@ -16,16 +17,6 @@ query getAllProducts {
           id
           name
           values
-        }
-        variants(first: 1) {
-          edges {
-            node {
-              id
-              image {
-                id
-              }
-            }
-          }
         }
       }
     }

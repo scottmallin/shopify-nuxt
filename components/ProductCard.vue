@@ -2,7 +2,7 @@
   <div class="border border-gray-300 bg-white p-4">
     <a :href="'/products/' + product.handle">
       <img
-        :src="product.images[0].src"
+        :src="product.images.edges[0].node.originalSrc"
         :alt="product.title"
         class="mx-auto mb-4"
         loading="lazy"
@@ -18,8 +18,8 @@ export default {
   props: {
     product: {
       type: Object,
-      default: null,
-    },
-  },
+      default: null
+    }
+  }
 }
 </script>

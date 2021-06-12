@@ -2,9 +2,9 @@
   <div class="flex flex-wrap">
     <div class="w-full md:w-1/2">
       <img
-        v-for="image in product.images"
-        :key="image.id"
-        :src="image.src"
+        v-for="image in product.images.edges"
+        :key="image.node.index"
+        :src="image.node.originalSrc"
         alt=""
       />
     </div>
@@ -14,7 +14,7 @@
         <div v-for="option in product.options" :key="option.id">
           <label :for="'options_' + option.name">{{ option.name }}</label>
           <select
-            @change="optionSelect($event, option.name)"
+            @change="findVariant"
             name="options"
             :id="'options_' + option.name"
           >
@@ -22,9 +22,9 @@
             <option
               v-for="value in option.values"
               :key="value.index"
-              :value="value.value"
+              :value="value"
             >
-              {{ value.value }}
+              {{ value }}
             </option>
           </select>
         </div>
@@ -34,49 +34,52 @@
 </template>
 
 <script>
+import productByHandle from "~/graphql/productByHandle"
+import getVariant from "~/graphql/getVariant"
+
 export default {
-  data: function () {
+  data() {
     return {
       handle: this.$route.params.handle,
       selectedOptions: [],
-      selectedVariant: ''
+      selectedVariant: ""
+    }
+  },
+  async asyncData({ app, params }) {
+    const client = app.apolloProvider.defaultClient
+    const { handle } = params
+
+    const res = await client.query({
+      query: productByHandle,
+      variables: {
+        handle: handle
+      }
+    })
+
+    const product = res.data.productByHandle
+    return {
+      product
     }
   },
   methods: {
-    optionSelect(e, optionName) {
-      const option = {
-        name: optionName,
-        value: e.target.value
-      }
-
-      if (this.selectedOptions.findIndex((f) => f.name === optionName) != -1) {
-        this.$set(
-          this.selectedOptions,
-          this.selectedOptions.findIndex((f) => f.name === optionName),
-          option
-        )
-      } else {
-        this.selectedOptions.push(option)
-      }
-
-      this.calculateVariant(this.selectedOptions)
-      this.variantBySelectedOptions(this.selectedOptions)
+    onOptionSelect(e) {
+      console.log("onOptionSelect", e)
     },
-    calculateVariant(options) {
-      console.log('calculateVariant', options)
-    },
-    async variantBySelectedOptions(options) {
-      console.log(this.$shopify)
-      // this.variant = await this.$shopify.product.variantBySelectedOptions(
-      //   options
-      // )
+    async findVariant() {
+      const productID = this.product.id
+
+      const client = this.$apollo.getClient()
+      const res = await client.query({
+        query: getVariant,
+        variables: {
+          id: productID,
+          name: "Color",
+          value: "Green"
+        }
+      })
+
+      this.selectedVariant = res
     }
-  },
-  async asyncData({ $shopify, params }) {
-    const product = await $shopify.product.fetchByHandle(params.handle)
-    const options = product.options
-    const variants = product.variants
-    return { product, options, variants }
   }
 }
 </script>

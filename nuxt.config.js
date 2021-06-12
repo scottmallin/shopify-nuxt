@@ -29,14 +29,14 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/apollo'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    '@nuxtjs/apollo'
+    '@nuxtjs/axios'
   ],
 
   apollo: {
@@ -53,18 +53,6 @@ export default {
       }
     }
   },
-
-  // shopify: {
-  //   domain: process.env.SHOPIFY_DOMAIN,
-  //   storefrontAccessToken: process.env.SHOPIFY_TOKEN,
-
-  //   /**
-  //    * This will be larger than the optimized version, as it will contain all fields that are available in the
-  //    * Storefront API. (https://help.shopify.com/en/api/custom-storefronts/storefront-api/reference)
-  //    * This should only be used when you need to add custom queries to supplement the JS Buy SDK queries.
-  //    */
-  //   unoptimized: true,
-  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},

@@ -1,0 +1,15 @@
+query getVariant($productId: ID!, $name: String!, $value: String!) {
+  node(id: $productId) {
+    ... on Product {
+      variantBySelectedOptions(
+        selectedOptions: [{ name: $name, value: $value }]
+      ) {
+        title
+        product {
+          id
+          title
+        }
+      }
+    }
+  }
+}

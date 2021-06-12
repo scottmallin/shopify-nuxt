@@ -1,37 +1,29 @@
 <template>
   <div>
-    {{ shop }}
-    {{ products }}
-    <ul class="pt-4">
-      <li v-for="product in products.edges" :key="product.id">
-        {{ product.title }}
+    <ul>
+      <li v-for="product in products.edges" :key="product.node.id">
+        <ProductCard :product="product.node" />
       </li>
-      <!-- <li v-for="product in products.edges" :key="product.id">
-        <ProductCard :product="product" />
-      </li> -->
     </ul>
   </div>
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
 import getAllProducts from '~/graphql/products'
-import getShopName from '~/graphql/shop'
 
 export default {
   apollo: {
-    shop: {
-      query: getShopName,
-      update: (data) => data.shop
-    },
+    shop: gql`
+      {
+        shop {
+          name
+        }
+      }
+    `,
     products: {
-      query: getAllProducts,
-      update: (data) => data.products
-    }
-  },
-  data() {
-    return {
-      shop: '',
-      products: ''
+      query: getAllProducts
     }
   }
 }

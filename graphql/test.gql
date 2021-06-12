@@ -1,0 +1,27 @@
+{
+  products(first: 2) {
+    edges {
+      node {
+        id
+        title
+        options {
+          id
+          name
+          values
+        }
+        variantBySelectedOptions(
+          selectedOptions: [
+            { name: "Color", value: "Black" }
+            { name: "Size", value: "7" }
+          ]
+        ) {
+          title
+          product {
+            id
+            title
+          }
+        }
+      }
+    }
+  }
+}
