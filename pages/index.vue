@@ -9,19 +9,10 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-
-import getAllProducts from '~/graphql/products'
+import getAllProducts from "~/graphql/products"
 
 export default {
   apollo: {
-    shop: gql`
-      {
-        shop {
-          name
-        }
-      }
-    `,
     products: {
       query: getAllProducts
     }

@@ -10,11 +10,22 @@
     </div>
     <div class="w-full md:w-1/2">
       <h1>{{ product.title }}</h1>
+      <h2
+        v-if="
+          !selectedVariant ||
+          selectedVariant.data.node.variantBySelectedOptions === null
+        "
+      >
+        From {{ product.priceRange.minVariantPrice.amount }}
+      </h2>
+      <h2 v-else>
+        {{ selectedVariant.data.node.variantBySelectedOptions.priceV2.amount }}
+      </h2>
       <form v-if="product.options" action="" method="post">
         <div v-for="option in product.options" :key="option.id">
           <label :for="'options_' + option.name">{{ option.name }}</label>
           <select
-            @change="findVariant"
+            @change="onOptionSelect($event, option.name)"
             name="options"
             :id="'options_' + option.name"
           >
@@ -36,6 +47,7 @@
 <script>
 import productByHandle from "~/graphql/productByHandle"
 import getVariant from "~/graphql/getVariant"
+import basketAdd from "~/graphql/basket"
 
 export default {
   data() {
@@ -62,24 +74,52 @@ export default {
     }
   },
   methods: {
-    onOptionSelect(e) {
-      console.log("onOptionSelect", e)
+    onOptionSelect(e, optionName) {
+      const option = {
+        name: optionName,
+        value: e.target.value
+      }
+
+      if (this.selectedOptions.findIndex((f) => f.name === optionName) != -1) {
+        this.$set(
+          this.selectedOptions,
+          this.selectedOptions.findIndex((f) => f.name === optionName),
+          option
+        )
+      } else {
+        this.selectedOptions.push(option)
+      }
+
+      this.findVariant(this.selectedOptions)
     },
-    async findVariant() {
+    findVariant(options) {
       const productID = this.product.id
-
       const client = this.$apollo.getClient()
-      const res = await client.query({
-        query: getVariant,
-        variables: {
-          id: productID,
-          name: "Color",
-          value: "Green"
-        }
-      })
 
-      this.selectedVariant = res
+      client
+        .query({
+          query: getVariant,
+          variables: {
+            id: productID,
+            options: options
+            // name: "Color",
+            // value: "Green"
+          }
+        })
+        .then((res) => {
+          this.selectedVariant = res
+        })
     }
+    // onBasketAdd() {
+    //   const client = this.$apollo.getClient()
+
+    //   client.mutate({
+    //     mutation: basketAdd,
+    //     variables: {
+    //       checkoutId:
+    //     }
+    //   })
+    // }
   }
 }
 </script>

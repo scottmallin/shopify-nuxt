@@ -2,6 +2,11 @@ query product($handle: String!) {
   productByHandle(handle: $handle) {
     id
     title
+    priceRange {
+      minVariantPrice {
+        amount
+      }
+    }
     images(first: 1) {
       edges {
         node {
