@@ -1,10 +1,12 @@
 <template>
   <div>
-    <ul>
-      <li v-for="product in products.edges" :key="product.node.id">
-        <ProductCard :product="product.node" />
-      </li>
-    </ul>
+    <CardList>
+      <ProductCard
+        v-for="product in products.edges"
+        :key="product.node.id"
+        :product="product.node"
+      />
+    </CardList>
   </div>
 </template>
 

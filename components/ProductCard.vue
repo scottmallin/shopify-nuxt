@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-300 bg-white p-4">
+  <div class="w-full md:w-1/2 lg:w-1/3 px-2">
     <a :href="'/products/' + product.handle">
       <img
         :src="product.images.edges[0].node.originalSrc"

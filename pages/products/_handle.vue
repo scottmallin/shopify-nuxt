@@ -1,45 +1,56 @@
 <template>
-  <div class="flex flex-wrap">
-    <div class="w-full md:w-1/2">
-      <img
-        v-for="image in product.images.edges"
-        :key="image.node.index"
-        :src="image.node.originalSrc"
-        alt=""
-      />
-    </div>
-    <div class="w-full md:w-1/2">
-      <h1>{{ product.title }}</h1>
-      <h2
-        v-if="
-          !selectedVariant ||
-          selectedVariant.data.node.variantBySelectedOptions === null
-        "
-      >
-        From {{ product.priceRange.minVariantPrice.amount }}
-      </h2>
-      <h2 v-else>
-        {{ selectedVariant.data.node.variantBySelectedOptions.priceV2.amount }}
-      </h2>
-      <form v-if="product.options" action="" method="post">
-        <div v-for="option in product.options" :key="option.id">
-          <label :for="'options_' + option.name">{{ option.name }}</label>
-          <select
-            @change="onOptionSelect($event, option.name)"
-            name="options"
-            :id="'options_' + option.name"
-          >
-            <option value="">--Select--</option>
-            <option
-              v-for="value in option.values"
-              :key="value.index"
-              :value="value"
-            >
-              {{ value }}
-            </option>
-          </select>
+  <div class="container">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full md:w-1/2 px-2">
+        <img
+          v-for="image in product.images.edges"
+          :key="image.node.index"
+          :src="image.node.originalSrc"
+          alt=""
+        />
+      </div>
+      <div class="w-full md:w-1/2 px-2 flex flex-wrap items-center">
+        <div class="self-start">
+          <button @click="$router.go(-1)">Back</button>
         </div>
-      </form>
+        <div class="self-start w-full">
+          <h1 class="text-4xl mb-2">{{ product.title }}</h1>
+          <h2
+            class="text-2xl mb-6"
+            v-if="
+              !selectedVariant ||
+              selectedVariant.data.node.variantBySelectedOptions === null
+            "
+          >
+            From {{ product.priceRange.minVariantPrice.amount }}
+          </h2>
+          <h2 class="text-2xl mb-6" v-else>
+            {{
+              selectedVariant.data.node.variantBySelectedOptions.priceV2.amount
+            }}
+          </h2>
+          <form v-if="product.options" action="" method="post">
+            <div v-for="option in product.options" :key="option.id">
+              <label :for="'options_' + option.name">{{ option.name }}</label>
+              <select
+                class="block w-full border p-2 rounded"
+                @change="onOptionSelect($event, option.name)"
+                name="options"
+                :id="'options_' + option.name"
+              >
+                <option value="">--Select--</option>
+                <option
+                  v-for="value in option.values"
+                  :key="value.index"
+                  :value="value"
+                >
+                  {{ value }}
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
